@@ -11,18 +11,13 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(uuid())
-  name  String
-  email String
-
-  password_hash String
-}
-
-model Org {
   id           String @id @default(uuid())
   name         String
+  email        String
   address      String
   phone_number String
+
+  is_an_org Boolean? @default(false)
 
   password_hash String
   pet           Pet[]
@@ -40,6 +35,6 @@ model Pet {
   breed       Breed   @default(CAT)
   description String?
 
-  org   Org    @relation(fields: [orgId], references: [id])
+  org   User   @relation(fields: [orgId], references: [id])
   orgId String
 }

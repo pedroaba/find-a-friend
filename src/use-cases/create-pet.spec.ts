@@ -1,26 +1,29 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { InMemoryOrgRepository } from "@/repositories/in-memory/in-memory-org-repository";
 import { InMemoryPetRepository } from "@/repositories/in-memory/in-memory-pet-repository";
 import { CreatePetUseCase } from "./create-pet";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
+import { IsNotAOrgError } from "./errors/is-not-a-org-error";
 
-let orgRepository: InMemoryOrgRepository;
+let userRepository: InMemoryUserRepository;
 let petRepository: InMemoryPetRepository;
 let sut: CreatePetUseCase;
 
 describe("Create Pet Use Case", () => {
   beforeEach(() => {
-    orgRepository = new InMemoryOrgRepository();
+    userRepository = new InMemoryUserRepository();
     petRepository = new InMemoryPetRepository();
-    sut = new CreatePetUseCase(petRepository, orgRepository);
+    sut = new CreatePetUseCase(petRepository, userRepository);
   });
 
-  it("it should be able to create a pet", async () => {
-    const org = await orgRepository.create({
-      name: "JavaScript Org",
+  it("should be able to create a pet", async () => {
+    const org = await userRepository.create({
+      name: "Jhon Doe",
+      email: "jhondoe@example.com",
       password_hash: "123456",
       address: "Cachoeira de Minas",
-      phone_number: "9999999999",
+      phone_number: "9999999999999",
+      is_an_org: true,
     });
 
     const { pet } = await sut.execute({
@@ -39,7 +42,7 @@ describe("Create Pet Use Case", () => {
     );
   });
 
-  it("it should not be able to create a pet without orgId", async () => {
+  it("should not be able to create a pet without orgId", async () => {
     await expect(() =>
       sut.execute({
         name: "Gato 1",
@@ -48,5 +51,25 @@ describe("Create Pet Use Case", () => {
         orgId: "inexistent-org-id",
       }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError);
+  });
+
+  it("should not be able create a pet with a user that is not an organization", async () => {
+    const org = await userRepository.create({
+      name: "Jhon Doe",
+      email: "jhondoe@example.com",
+      password_hash: "123456",
+      address: "Cachoeira de Minas",
+      phone_number: "9999999999999",
+      is_an_org: false,
+    });
+
+    await expect(() =>
+      sut.execute({
+        name: "Gato 1",
+        breed: "CAT",
+        description: "",
+        orgId: org.id,
+      }),
+    ).rejects.toBeInstanceOf(IsNotAOrgError);
   });
 });

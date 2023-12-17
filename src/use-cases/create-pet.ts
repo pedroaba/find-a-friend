@@ -1,7 +1,8 @@
-import { OrgRepository } from "@/repositories/orgs-repository";
 import { PetRepository } from "@/repositories/pets-repository";
 import { Pet } from "@prisma/client";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { UserRepository } from "@/repositories/users-repository";
+import { IsNotAOrgError } from "./errors/is-not-a-org-error";
 
 interface CreatePetUseCaseRequest {
   name: string;
@@ -17,7 +18,7 @@ interface CreatePetUseCaseResponse {
 export class CreatePetUseCase {
   constructor(
     private petRepository: PetRepository,
-    private orgRepository: OrgRepository,
+    private userRepository: UserRepository,
   ) {}
 
   async execute({
@@ -26,10 +27,14 @@ export class CreatePetUseCase {
     name,
     orgId,
   }: CreatePetUseCaseRequest): Promise<CreatePetUseCaseResponse> {
-    const doesOrgExists = await this.orgRepository.findById(orgId);
+    const doesOrgExists = await this.userRepository.findById(orgId);
 
     if (!doesOrgExists) {
       throw new ResourceNotFoundError();
+    }
+
+    if (!doesOrgExists.is_an_org) {
+      throw new IsNotAOrgError();
     }
 
     const pet = await this.petRepository.create({
