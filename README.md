@@ -20,3 +20,7 @@
 - [ ] O usuário que quer adotar, entrará em contato com a ORG via WhatsApp
 - [ ] Todos os filtros, além da cidade, são opcionais
 - [ ] Para uma ORG acessar a aplicação como admin, ela precisa estar logada
+
+## Requisitos não funcionais
+
+- [ ] Cada listagem deve ser paginada, com 10 elementos por página

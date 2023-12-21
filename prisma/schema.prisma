@@ -35,6 +35,8 @@ model Pet {
   breed       Breed   @default(CAT)
   description String?
 
+  is_available_for_adoption Boolean? @default(true)
+
   org   User   @relation(fields: [orgId], references: [id])
   orgId String
 }
