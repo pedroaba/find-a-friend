@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Pet" ALTER COLUMN "breed" SET DEFAULT 'CAT';
