@@ -1,5 +1,5 @@
 export class AddressNonExistentError extends Error {
   constructor() {
-    super("Address does not exists");
+    super('Address does not exists')
   }
 }

@@ -1,14 +1,15 @@
-import { Org, Prisma } from "@prisma/client";
+import { Org, Prisma } from '@prisma/client'
 
 export interface FindOrgByNameAndAddressParams {
-  orgName: string;
-  addressId: string;
+  orgName: string
+  addressId: string
 }
 
 export interface OrgRepository {
-  create(data: Prisma.OrgUncheckedCreateInput): Promise<Org>;
+  create(data: Prisma.OrgUncheckedCreateInput): Promise<Org>
   findOrgByNameAndAddress(
     params: FindOrgByNameAndAddressParams,
-  ): Promise<Org | null>;
-  findById(id: string): Promise<Org | null>;
+  ): Promise<Org | null>
+  findById(id: string): Promise<Org | null>
+  fetchOrgsByAddress(addressId: string): Promise<Org[]>
 }

@@ -1,15 +1,15 @@
-import { AddressRepository } from "@/repositories/address-repository";
-import { Address } from "@prisma/client";
-import { ResourceAlreadyExists } from "../errors/resource-already-exists-error";
+import { AddressRepository } from '@/repositories/address-repository'
+import { Address } from '@prisma/client'
+import { ResourceAlreadyExists } from '../errors/resource-already-exists-error'
 
 interface CreateAddressUseCaseRequest {
-  id?: string;
-  city: string;
-  state: string;
+  id?: string
+  city: string
+  state: string
 }
 
 interface CreateAddressUseCaseResponse {
-  address: Address;
+  address: Address
 }
 
 export class CreateAddressUseCase {
@@ -24,18 +24,18 @@ export class CreateAddressUseCase {
       await this.addressRepository.findAnAddressByCityAndState({
         city,
         state,
-      });
+      })
 
     if (addressOnDB) {
-      throw new ResourceAlreadyExists();
+      throw new ResourceAlreadyExists()
     }
 
     const address = await this.addressRepository.create({
       city,
       state,
       id,
-    });
+    })
 
-    return { address };
+    return { address }
   }
 }

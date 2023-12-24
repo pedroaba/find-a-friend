@@ -1,17 +1,17 @@
-import { AddressRepository } from "@/repositories/address-repository";
-import { OrgRepository } from "@/repositories/org-repository";
-import { Org } from "@prisma/client";
-import { AddressNonExistentError } from "../errors/address-nonexistent-error";
-import { ResourceAlreadyExists } from "../errors/resource-already-exists-error";
+import { AddressRepository } from '@/repositories/address-repository'
+import { OrgRepository } from '@/repositories/org-repository'
+import { Org } from '@prisma/client'
+import { AddressNonExistentError } from '../errors/address-nonexistent-error'
+import { ResourceAlreadyExists } from '../errors/resource-already-exists-error'
 
 interface CreateOrgUseCaseRequest {
-  id?: string;
-  name: string;
-  addressId: string;
+  id?: string
+  name: string
+  addressId: string
 }
 
 interface CreateOrgUseCaseResponse {
-  org: Org;
+  org: Org
 }
 
 export class CreateOrgUseCase {
@@ -26,27 +26,27 @@ export class CreateOrgUseCase {
     name,
   }: CreateOrgUseCaseRequest): Promise<CreateOrgUseCaseResponse> {
     const doesAddressExists =
-      await this.addressRepository.findAddressById(addressId);
+      await this.addressRepository.findAddressById(addressId)
 
     if (!doesAddressExists) {
-      throw new AddressNonExistentError();
+      throw new AddressNonExistentError()
     }
 
     const orgOnDB = await this.orgRepository.findOrgByNameAndAddress({
       orgName: name,
       addressId,
-    });
+    })
 
     if (orgOnDB) {
-      throw new ResourceAlreadyExists();
+      throw new ResourceAlreadyExists()
     }
 
     const org = await this.orgRepository.create({
       addressId,
       name,
       id,
-    });
+    })
 
-    return { org };
+    return { org }
   }
 }

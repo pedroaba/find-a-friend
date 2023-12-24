@@ -1,23 +1,23 @@
-import { Address, Prisma } from "@prisma/client";
+import { Address, Prisma } from '@prisma/client'
 import {
   AddressRepository,
   FindAnAddressByCityAndStateParams,
-} from "../address-repository";
-import { randomUUID } from "node:crypto";
+} from '../address-repository'
+import { randomUUID } from 'node:crypto'
 
 export class InMemoryAddressRepository implements AddressRepository {
-  public items: Address[] = [];
+  public items: Address[] = []
 
   async create(data: Prisma.AddressCreateInput) {
     const address = {
       id: data.id ?? randomUUID(),
       city: data.city,
       state: data.state,
-    };
+    }
 
-    this.items.push(address);
+    this.items.push(address)
 
-    return address;
+    return address
   }
 
   async findAnAddressByCityAndState({
@@ -26,22 +26,37 @@ export class InMemoryAddressRepository implements AddressRepository {
   }: FindAnAddressByCityAndStateParams) {
     const address = this.items.find(
       (item) => item.city === city && item.state === state,
-    );
+    )
 
     if (!address) {
-      return null;
+      return null
     }
 
-    return address;
+    return address
   }
 
   async findAddressById(id: string) {
-    const address = this.items.find((item) => item.id === id);
+    const address = this.items.find((item) => item.id === id)
 
     if (!address) {
-      return null;
+      return null
     }
 
-    return address;
+    return address
+  }
+
+  async findAnAddressByCityOrState({
+    city,
+    state,
+  }: FindAnAddressByCityAndStateParams) {
+    const address = this.items.find(
+      (item) => item.city === city || item.state === state,
+    )
+
+    if (!address) {
+      return null
+    }
+
+    return address
   }
 }

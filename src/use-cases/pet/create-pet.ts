@@ -1,17 +1,17 @@
-import { OrgRepository } from "@/repositories/org-repository";
-import { PetRepository } from "@/repositories/pet-repository";
-import { Pet } from "@prisma/client";
-import { InvalidOrgError } from "../errors/invalid-org-error";
+import { OrgRepository } from '@/repositories/org-repository'
+import { PetRepository } from '@/repositories/pet-repository'
+import { Pet } from '@prisma/client'
+import { InvalidOrgError } from '../errors/invalid-org-error'
 
 interface CreatePetUseCaseRequest {
-  id?: string;
-  name: string;
-  breed: string;
-  orgId: string;
+  id?: string
+  name: string
+  breed: string
+  orgId: string
 }
 
 interface CreatePetUseCaseResponse {
-  pet: Pet;
+  pet: Pet
 }
 
 export class CreatePetUseCase {
@@ -26,10 +26,10 @@ export class CreatePetUseCase {
     orgId,
     id,
   }: CreatePetUseCaseRequest): Promise<CreatePetUseCaseResponse> {
-    const doesOrgExists = await this.orgRepository.findById(orgId);
+    const doesOrgExists = await this.orgRepository.findById(orgId)
 
     if (!doesOrgExists) {
-      throw new InvalidOrgError();
+      throw new InvalidOrgError()
     }
 
     const pet = await this.petRepository.create({
@@ -37,10 +37,10 @@ export class CreatePetUseCase {
       name,
       orgId,
       id,
-    });
+    })
 
     return {
       pet,
-    };
+    }
   }
 }

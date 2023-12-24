@@ -1,3 +1,3 @@
 export class InMemoryRepository<T> {
-  public items: T[] = [];
+  public items: T[] = []
 }

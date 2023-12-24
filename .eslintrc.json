@@ -10,7 +10,9 @@
     "prettier/prettier": [
       "error",
       {
-        "endOfLine": "auto"
+        "endOfLine": "crlf",
+        "singleQuote": true,
+        "semi": false
       }
     ],
     "camelcase": "off",

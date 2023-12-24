@@ -1,13 +1,13 @@
-import { app } from "./app";
-import { env } from "./env";
+import { app } from './app'
+import { env } from './env'
 
-const PORT = env.PORT;
+const PORT = env.PORT
 
 app
   .listen({
-    host: "0.0.0.0",
+    host: '0.0.0.0',
     port: PORT,
   })
   .then(() => {
-    console.log(`HTTP Server running on port ${PORT} 🚀`);
-  });
+    console.log(`HTTP Server running on port ${PORT} 🚀`)
+  })
